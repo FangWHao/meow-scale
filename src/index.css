@@ -1,0 +1,88 @@
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;600;700&display=swap');
+
+:root {
+  /* Meow Palette */
+  --color-primary: #FFB7B2;   /* Soft Pink */
+  --color-secondary: #B5EAD7; /* Mint Green */
+  --color-accent: #C7CEEA;    /* Periwinkle */
+  --color-background: #FFF9F9; /* Very light warmth */
+  --color-surface: #FFFFFF;
+  --color-text: #6A5D5D;      /* Warm Grey */
+  --color-text-light: #9E9E9E;
+  --color-danger: #FFDAC1;    /* Peach (for mockery/errors) */
+  --color-success: #E2F0CB;   /* Light Lime */
+
+  --font-main: 'Fredoka', sans-serif;
+
+  --shadow-soft: 0 4px 20px rgba(0, 0, 0, 0.05);
+  --shadow-card: 0 8px 30px rgba(255, 183, 178, 0.2);
+  
+  --radius-lg: 24px;
+  --radius-md: 16px;
+  --radius-sm: 12px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-main);
+  background-color: var(--color-background);
+  color: var(--color-text);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+input, select, textarea {
+  font-family: inherit;
+  border: 2px solid transparent;
+  outline: none;
+}
+
+/* Utilities */
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.card {
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  box-shadow: var(--shadow-card);
+  margin-bottom: 20px;
+  border: 1px solid rgba(255,255,255,0.5);
+}
+
+.btn-primary {
+  background-color: var(--color-primary);
+  color: white;
+  padding: 12px 24px;
+  border-radius: 50px;
+  font-weight: 600;
+  font-size: 1.1rem;
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 4px 15px rgba(255, 183, 178, 0.4);
+}
+
+.btn-primary:active {
+  transform: scale(0.95);
+}
+
+.text-center { text-align: center; }
+.flex-center { display: flex; align-items: center; justify-content: center; }
+.w-full { width: 100%; }
