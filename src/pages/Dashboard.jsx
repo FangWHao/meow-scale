@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import { useTheme } from '../contexts/ThemeContext';
 import { getUserProfile } from '../services/userService';
 import { addWeightRecord, getWeightHistory } from '../services/weightService';
 import Card from '../components/Card';
@@ -11,6 +12,7 @@ import { Cat, Pencil } from 'lucide-react';
 
 const Dashboard = () => {
     const { currentUser } = useAuth();
+    const { isDark } = useTheme();
     const navigate = useNavigate();
     const [loading, setLoading] = useState(true);
     const [userProfile, setUserProfile] = useState(null);
@@ -116,49 +118,81 @@ const Dashboard = () => {
     };
 
     const getBMICategory = (bmi) => {
-        if (bmi < 18.5) return { label: '偏瘦 🦴', color: '#3498db' };
-        if (bmi < 24.9) return { label: '正常 ✨', color: '#2ecc71' };
-        if (bmi < 29.9) return { label: '超重 🍞', color: '#f1c40f' };
-        return { label: '肥胖 🍕', color: '#e74c3c' };
+        if (bmi < 18.5) return { label: '体重过低 🦴', color: '#3498db', range: '< 18.5' };
+        if (bmi < 24.0) return { label: '体重正常 ✨', color: '#2ecc71', range: '18.5-24.0' };
+        if (bmi < 28.0) return { label: '超重 🍞', color: '#f1c40f', range: '24.0-28.0' };
+        return { label: '肥胖 🍕', color: '#e74c3c', range: '≥ 28.0' };
     };
 
     const BMIIndicator = ({ bmi }) => {
         const category = getBMICategory(bmi);
-        const percentage = Math.min(Math.max((bmi - 15) / (35 - 15) * 100, 0), 100);
+
+        // 以 BMI=20 为中心，范围 10-30
+        const minBMI = 10;
+        const maxBMI = 30;
+        const percentage = Math.min(Math.max((bmi - minBMI) / (maxBMI - minBMI) * 100, 0), 100);
+
+        // BMI 区间定义 - 统一颜色
+        const ranges = [
+            { label: '过低', color: '#3498db', start: 10, end: 18.5 },
+            { label: '正常', color: '#2ecc71', start: 18.5, end: 24.0 },
+            { label: '超重', color: '#f1c40f', start: 24.0, end: 28.0 },
+            { label: '肥胖', color: '#e74c3c', start: 28.0, end: 30 }
+        ];
+
+        const totalRange = maxBMI - minBMI;
 
         return (
             <div style={{ marginTop: '10px', width: '100%' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', marginBottom: '4px', color: '#888' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', marginBottom: '4px', color: isDark ? '#a0a0a0' : '#888' }}>
                     <span>{category.label}</span>
                     <span>BMI: {bmi}</span>
                 </div>
-                <div style={{ height: '8px', background: '#eee', borderRadius: '4px', position: 'relative', overflow: 'hidden' }}>
-                    <div style={{
-                        position: 'absolute',
-                        left: 0,
-                        top: 0,
-                        height: '100%',
-                        width: '100%',
-                        background: 'linear-gradient(to right, #3498db 0%, #2ecc71 40%, #f1c40f 70%, #e74c3c 100%)',
-                        opacity: 0.3
-                    }} />
+                <div style={{
+                    height: '8px',
+                    background: isDark ? '#3a3a3a' : '#eee',
+                    borderRadius: '4px',
+                    position: 'relative',
+                    overflow: 'hidden',
+                    display: 'flex'
+                }}>
+                    {/* 分段显示 BMI 区间 */}
+                    {ranges.map((range, index) => {
+                        const width = ((range.end - range.start) / totalRange) * 100;
+                        const isActive = bmi >= range.start && bmi < range.end;
+                        return (
+                            <div
+                                key={index}
+                                style={{
+                                    width: `${width}%`,
+                                    height: '100%',
+                                    background: range.color,
+                                    opacity: isActive ? 1 : 0.3,
+                                    transition: 'opacity 0.3s ease',
+                                    borderRight: index < ranges.length - 1 ? `1px solid ${isDark ? '#2d2d2d' : '#fff'}` : 'none'
+                                }}
+                            />
+                        );
+                    })}
+                    {/* 当前 BMI 指示器 */}
                     <div style={{
                         position: 'absolute',
                         left: `${percentage}%`,
-                        top: 0,
-                        height: '100%',
-                        width: '4px',
-                        background: category.color,
-                        boxShadow: '0 0 5px rgba(0,0,0,0.2)',
+                        top: '-2px',
+                        height: 'calc(100% + 4px)',
+                        width: '3px',
+                        background: '#fff',
+                        boxShadow: '0 0 8px rgba(0,0,0,0.5)',
                         transform: 'translateX(-50%)',
-                        transition: 'left 0.5s ease-out'
+                        transition: 'left 0.5s ease-out',
+                        borderRadius: '2px'
                     }} />
                 </div>
             </div>
         );
     };
 
-    const ProgressCircle = ({ current, target, initial, label = '目标进度' }) => {
+    const ProgressCircle = ({ current, target, initial, label = '目标进度', color = 'var(--color-primary)' }) => {
         if (!target) return null;
         let progress = 0;
         if (initial && target !== initial) {
@@ -174,11 +208,16 @@ const Dashboard = () => {
                     <span style={{ color: 'var(--color-text-light)' }}>{label}: {target} kg</span>
                     <span style={{ fontWeight: '600' }}>{Math.round(progress)}%</span>
                 </div>
-                <div style={{ height: '12px', background: '#f0f0f0', borderRadius: '6px', overflow: 'hidden' }}>
+                <div className="progress-bar-bg" style={{
+                    height: '12px',
+                    background: isDark ? '#3a3a3a' : '#f0f0f0',
+                    borderRadius: '6px',
+                    overflow: 'hidden'
+                }}>
                     <div style={{
                         height: '100%',
                         width: `${progress}%`,
-                        background: 'var(--color-primary)',
+                        background: color,
                         transition: 'width 1s ease-in-out',
                         borderRadius: '6px'
                     }} />
@@ -222,26 +261,38 @@ const Dashboard = () => {
             )}
 
             <div style={{ display: 'grid', gridTemplateColumns: partnerProfile ? '1fr 1fr' : '1fr', gap: '16px', marginBottom: '20px' }}>
-                <Card className="flex-center" style={{ flexDirection: 'column', background: 'linear-gradient(135deg, #FFF0F5 0%, #FFFFFF 100%)', padding: '24px' }}>
+                <Card className="flex-center" style={{
+                    flexDirection: 'column',
+                    background: isDark
+                        ? 'linear-gradient(135deg, #3a2828 0%, #2d2d2d 50%, #2d2d2d 100%)'
+                        : 'linear-gradient(135deg, #FFE5E5 0%, #FFF5F5 50%, #FFFFFF 100%)',
+                    padding: '24px'
+                }}>
                     <div style={{ fontSize: '0.9rem', color: '#888', marginBottom: '4px' }}>我</div>
                     <div style={{ fontSize: '2.5rem', fontWeight: '700', color: 'var(--color-primary)', marginBottom: '4px', whiteSpace: 'nowrap' }}>
                         {latestWeight ? latestWeight.weight : '--'} <span style={{ fontSize: '1.2rem' }}>kg</span>
                     </div>
                     {latestWeight && <BMIIndicator bmi={latestWeight.bmi} />}
                     {userProfile?.targetWeight && latestWeight && (
-                        <ProgressCircle current={latestWeight.weight} target={userProfile.targetWeight} initial={initialWeight} label="我的目标" />
+                        <ProgressCircle current={latestWeight.weight} target={userProfile.targetWeight} initial={initialWeight} label="我的目标" color="var(--color-primary)" />
                     )}
                 </Card>
 
                 {partnerProfile && (
-                    <Card className="flex-center" style={{ flexDirection: 'column', background: 'linear-gradient(135deg, #E0F7FA 0%, #FFFFFF 100%)', padding: '24px' }}>
+                    <Card className="flex-center" style={{
+                        flexDirection: 'column',
+                        background: isDark
+                            ? 'linear-gradient(135deg, #1f3a3a 0%, #2d2d2d 50%, #2d2d2d 100%)'
+                            : 'linear-gradient(135deg, #D4F1F4 0%, #E8F8F5 50%, #FFFFFF 100%)',
+                        padding: '24px'
+                    }}>
                         <div style={{ fontSize: '0.9rem', color: '#888', marginBottom: '4px' }}>{partnerProfile.displayName}</div>
                         <div style={{ fontSize: '2.5rem', fontWeight: '700', color: 'var(--color-secondary)', marginBottom: '4px', whiteSpace: 'nowrap' }}>
                             {partnerLatest ? partnerLatest.weight : '--'} <span style={{ fontSize: '1.2rem' }}>kg</span>
                         </div>
                         {partnerLatest && <BMIIndicator bmi={partnerLatest.bmi} />}
                         {partnerProfile.targetWeight && partnerLatest && (
-                            <ProgressCircle current={partnerLatest.weight} target={partnerProfile.targetWeight} initial={partnerInitial} label="Ta 的目标" />
+                            <ProgressCircle current={partnerLatest.weight} target={partnerProfile.targetWeight} initial={partnerInitial} label="Ta 的目标" color="var(--color-secondary)" />
                         )}
                     </Card>
                 )}
@@ -257,7 +308,12 @@ const Dashboard = () => {
             )}
 
             <Card>
-                <HistoryChart title="体重趋势" userData={history} partnerData={partnerHistory} />
+                <HistoryChart
+                    title="体重趋势"
+                    userData={history}
+                    partnerData={partnerHistory}
+                    onViewDetails={() => navigate('/history')}
+                />
             </Card>
 
             {/* Floating Action Button */}

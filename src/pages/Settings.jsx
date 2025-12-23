@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
+import { useTheme } from '../contexts/ThemeContext';
 import { getUserProfile, updateUserProfile, getPartnerByCode } from '../services/userService';
 import Card from '../components/Card';
 import Input from '../components/Input';
 import Button from '../components/Button';
-import { Settings as SettingsIcon, Save, ArrowLeft, Heart, Link as LinkIcon, Unlink } from 'lucide-react';
+import { Settings as SettingsIcon, Save, ArrowLeft, Heart, Link as LinkIcon, Unlink, Sun, Moon, Monitor } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 const Settings = () => {
     const { currentUser, logout } = useAuth();
+    const { themeMode, setTheme, isDark } = useTheme();
     const navigate = useNavigate();
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
@@ -199,9 +201,11 @@ const Settings = () => {
                                     value={formData.reminderTime}
                                     onChange={(e) => setFormData({ ...formData, reminderTime: e.target.value })}
                                     style={{
-                                        padding: '8px',
+                                        padding: '8px 12px',
                                         borderRadius: '8px',
-                                        border: '1px solid var(--color-surface)',
+                                        border: isDark ? '1px solid #4a4a4a' : '1px solid #ddd',
+                                        backgroundColor: isDark ? '#3a3a3a' : '#fff',
+                                        color: isDark ? '#e0e0e0' : 'var(--color-text)',
                                         fontSize: '1rem'
                                     }}
                                 />
@@ -211,11 +215,7 @@ const Settings = () => {
                         <Button
                             onClick={handleSubmit}
                             disabled={saving}
-                            style={{
-                                background: 'none',
-                                border: '1px solid var(--color-primary)',
-                                color: 'var(--color-primary)'
-                            }}
+                            style={{ width: '100%' }}
                         >
                             {saving ? '保存中...' : '保存通知设置'}
                         </Button>
@@ -223,10 +223,104 @@ const Settings = () => {
                 </Card>
             </section>
 
+            <section style={{ marginBottom: '30px' }}>
+                <h3 style={{ fontSize: '1.1rem', marginBottom: '15px', color: 'var(--color-text-light)' }}>主题设置 🎨</h3>
+                <Card>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+                        <div>
+                            <div style={{ fontWeight: '600', marginBottom: '10px' }}>选择主题模式</div>
+                            <div style={{ fontSize: '0.8rem', color: '#888', marginBottom: '15px' }}>
+                                选择你喜欢的界面风格
+                            </div>
+                        </div>
+
+                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '12px' }}>
+                            {/* 浅色模式 */}
+                            <button
+                                onClick={() => setTheme('light')}
+                                style={{
+                                    padding: '16px 12px',
+                                    borderRadius: '12px',
+                                    border: themeMode === 'light' ? '2px solid var(--color-primary)' : `2px solid ${isDark ? '#4a4a4a' : '#ddd'}`,
+                                    background: themeMode === 'light' ? 'rgba(255, 183, 178, 0.1)' : 'transparent',
+                                    cursor: 'pointer',
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'center',
+                                    gap: '8px',
+                                    transition: 'all 0.2s'
+                                }}
+                            >
+                                <Sun size={24} color={themeMode === 'light' ? 'var(--color-primary)' : '#888'} />
+                                <span style={{
+                                    fontSize: '0.85rem',
+                                    fontWeight: themeMode === 'light' ? '600' : '400',
+                                    color: themeMode === 'light' ? 'var(--color-primary)' : 'var(--color-text)'
+                                }}>
+                                    浅色
+                                </span>
+                            </button>
+
+                            {/* 深色模式 */}
+                            <button
+                                onClick={() => setTheme('dark')}
+                                style={{
+                                    padding: '16px 12px',
+                                    borderRadius: '12px',
+                                    border: themeMode === 'dark' ? '2px solid var(--color-primary)' : `2px solid ${isDark ? '#4a4a4a' : '#ddd'}`,
+                                    background: themeMode === 'dark' ? 'rgba(255, 183, 178, 0.1)' : 'transparent',
+                                    cursor: 'pointer',
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'center',
+                                    gap: '8px',
+                                    transition: 'all 0.2s'
+                                }}
+                            >
+                                <Moon size={24} color={themeMode === 'dark' ? 'var(--color-primary)' : '#888'} />
+                                <span style={{
+                                    fontSize: '0.85rem',
+                                    fontWeight: themeMode === 'dark' ? '600' : '400',
+                                    color: themeMode === 'dark' ? 'var(--color-primary)' : 'var(--color-text)'
+                                }}>
+                                    深色
+                                </span>
+                            </button>
+
+                            {/* 跟随系统 */}
+                            <button
+                                onClick={() => setTheme('auto')}
+                                style={{
+                                    padding: '16px 12px',
+                                    borderRadius: '12px',
+                                    border: themeMode === 'auto' ? '2px solid var(--color-primary)' : `2px solid ${isDark ? '#4a4a4a' : '#ddd'}`,
+                                    background: themeMode === 'auto' ? 'rgba(255, 183, 178, 0.1)' : 'transparent',
+                                    cursor: 'pointer',
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'center',
+                                    gap: '8px',
+                                    transition: 'all 0.2s'
+                                }}
+                            >
+                                <Monitor size={24} color={themeMode === 'auto' ? 'var(--color-primary)' : '#888'} />
+                                <span style={{
+                                    fontSize: '0.85rem',
+                                    fontWeight: themeMode === 'auto' ? '600' : '400',
+                                    color: themeMode === 'auto' ? 'var(--color-primary)' : 'var(--color-text)'
+                                }}>
+                                    跟随系统
+                                </span>
+                            </button>
+                        </div>
+                    </div>
+                </Card>
+            </section>
+
             <section>
                 <h3 style={{ fontSize: '1.1rem', marginBottom: '15px', color: 'var(--color-text-light)' }}>喵咪搭档 💖</h3>
                 <Card style={{ border: '2px solid var(--color-surface)' }}>
-                    <div style={{ marginBottom: '20px', padding: '15px', background: '#f8f9fa', borderRadius: 'var(--radius-md)' }}>
+                    <div style={{ marginBottom: '20px', padding: '15px', background: isDark ? '#3a3a3a' : '#f8f9fa', borderRadius: 'var(--radius-md)' }}>
                         <p style={{ fontSize: '0.9rem', color: '#666', marginBottom: '5px' }}>快把你的邀请码分享给 Ta 吧：</p>
                         <div style={{ fontSize: '1.4rem', fontWeight: '700', color: 'var(--color-primary)', letterSpacing: '2px' }}>
                             {userProfile?.partnerCode}
@@ -235,7 +329,7 @@ const Settings = () => {
 
                     {partnerProfile ? (
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '15px', background: 'var(--color-accent)', borderRadius: 'var(--radius-md)' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '15px', background: isDark ? '#3a3a4a' : 'var(--color-accent)', borderRadius: 'var(--radius-md)' }}>
                                 <Heart size={20} fill="var(--color-primary)" color="var(--color-primary)" />
                                 <div>
                                     <div style={{ fontSize: '0.8rem', color: '#888' }}>当前的猫咪搭档</div>
@@ -245,7 +339,7 @@ const Settings = () => {
                             <Button
                                 onClick={handleUnlinkPartner}
                                 disabled={partnerActionLoading}
-                                style={{ background: 'none', color: '#e74c3c', border: '1px solid #e74c3c', width: '100%' }}
+                                style={{ width: '100%' }}
                             >
                                 <Unlink size={18} style={{ marginRight: '8px' }} /> 解除绑定
                             </Button>
@@ -268,7 +362,9 @@ const Settings = () => {
                                         border: '2px solid var(--color-accent)',
                                         fontSize: '1rem',
                                         textAlign: 'center',
-                                        letterSpacing: '2px'
+                                        letterSpacing: '2px',
+                                        backgroundColor: isDark ? '#3a3a3a' : '#fff',
+                                        color: isDark ? '#e0e0e0' : 'var(--color-text)'
                                     }}
                                 />
                                 <Button
@@ -291,7 +387,7 @@ const Settings = () => {
             </section>
 
             <section style={{ marginTop: '30px' }}>
-                <Card style={{ border: '2px solid #fee', background: '#fff5f5' }}>
+                <Card style={{ border: isDark ? '2px solid #5c3a3a' : '2px solid #fee', background: isDark ? '#3a2a2a' : '#fff5f5' }}>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                         <div>
                             <div style={{ fontWeight: '600', color: '#e74c3c' }}>退出登录</div>

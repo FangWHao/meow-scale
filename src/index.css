@@ -1,22 +1,31 @@
 @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;600;700&display=swap');
 
 :root {
-  /* Meow Palette */
-  --color-primary: #FFB7B2;   /* Soft Pink */
-  --color-secondary: #B5EAD7; /* Mint Green */
-  --color-accent: #C7CEEA;    /* Periwinkle */
-  --color-background: #FFF9F9; /* Very light warmth */
+  /* Meow Palette - 优化版 */
+  --color-primary: #FFB7B2;
+  /* Soft Pink */
+  --color-secondary: #5FD4A8;
+  /* 更深的薄荷绿，提高对比度 */
+  /* Mint Green */
+  --color-accent: #C7CEEA;
+  /* Periwinkle */
+  --color-background: #F5F5F7;
+  /* 中性浅灰色，增加对比度 */
   --color-surface: #FFFFFF;
-  --color-text: #6A5D5D;      /* Warm Grey */
+  --color-text: #6A5D5D;
+  /* Warm Grey */
   --color-text-light: #9E9E9E;
-  --color-danger: #FFDAC1;    /* Peach (for mockery/errors) */
-  --color-success: #E2F0CB;   /* Light Lime */
+  --color-danger: #FFDAC1;
+  /* Peach (for mockery/errors) */
+  --color-success: #E2F0CB;
+  /* Light Lime */
 
   --font-main: 'Fredoka', sans-serif;
 
   --shadow-soft: 0 4px 20px rgba(0, 0, 0, 0.05);
-  --shadow-card: 0 8px 30px rgba(255, 183, 178, 0.2);
-  
+  --shadow-card: 0 2px 12px rgba(0, 0, 0, 0.08);
+  /* 更明显的阴影 */
+
   --radius-lg: 24px;
   --radius-md: 16px;
   --radius-sm: 12px;
@@ -43,7 +52,9 @@ button {
   background: none;
 }
 
-input, select, textarea {
+input,
+select,
+textarea {
   font-family: inherit;
   border: 2px solid transparent;
   outline: none;
@@ -65,7 +76,7 @@ input, select, textarea {
   padding: 24px;
   box-shadow: var(--shadow-card);
   margin-bottom: 20px;
-  border: 1px solid rgba(255,255,255,0.5);
+  border: 1px solid rgba(255, 255, 255, 0.5);
 }
 
 .btn-primary {
@@ -83,6 +94,84 @@ input, select, textarea {
   transform: scale(0.95);
 }
 
-.text-center { text-align: center; }
-.flex-center { display: flex; align-items: center; justify-content: center; }
-.w-full { width: 100%; }
+.text-center {
+  text-align: center;
+}
+
+.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.w-full {
+  width: 100%;
+}
+
+/* 深色模式适配 - 使用 data-theme 属性 */
+[data-theme="dark"] {
+  --color-background: #1a1a1a;
+  --color-surface: #2d2d2d;
+  --color-text: #e0e0e0;
+  --color-text-light: #a0a0a0;
+  --shadow-card: 0 2px 12px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="dark"] body {
+  background-color: var(--color-background);
+  color: var(--color-text);
+}
+
+[data-theme="dark"] .card {
+  background: var(--color-surface);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Topbar 深色模式 */
+[data-theme="dark"] .main-header {
+  background: rgba(45, 45, 45, 0.95) !important;
+  border-bottom: 2px solid #3a3a3a !important;
+}
+
+[data-theme="dark"] .cat-icon-bg {
+  box-shadow: 0 4px 10px rgba(255, 183, 178, 0.2) !important;
+}
+
+/* 输入框深色模式 */
+[data-theme="dark"] input,
+[data-theme="dark"] select,
+[data-theme="dark"] textarea {
+  background-color: #3a3a3a;
+  color: #e0e0e0;
+  border-color: #4a4a4a;
+}
+
+[data-theme="dark"] input::placeholder {
+  color: #888;
+}
+
+/* 按钮深色模式 */
+[data-theme="dark"] button {
+  color: var(--color-text);
+}
+
+/* 进度条深色模式 */
+[data-theme="dark"] .progress-bar-bg {
+  background: #3a3a3a !important;
+}
+
+/* 自动适配系统主题（作为后备） */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    --color-background: #1a1a1a;
+    --color-surface: #2d2d2d;
+    --color-text: #e0e0e0;
+    --color-text-light: #a0a0a0;
+    --shadow-card: 0 2px 12px rgba(0, 0, 0, 0.3);
+  }
+
+  :root:not([data-theme]) body {
+    background-color: var(--color-background);
+    color: var(--color-text);
+  }
+}
