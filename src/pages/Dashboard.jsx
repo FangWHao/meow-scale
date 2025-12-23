@@ -118,8 +118,8 @@ const Dashboard = () => {
     };
 
     const getBMICategory = (bmi) => {
-        if (bmi < 18.5) return { label: '体重过低 🦴', color: '#3498db', range: '< 18.5' };
-        if (bmi < 24.0) return { label: '体重正常 ✨', color: '#2ecc71', range: '18.5-24.0' };
+        if (bmi < 18.5) return { label: '过低 🦴', color: '#3498db', range: '< 18.5' };
+        if (bmi < 24.0) return { label: '正常 ✨', color: '#2ecc71', range: '18.5-24.0' };
         if (bmi < 28.0) return { label: '超重 🍞', color: '#f1c40f', range: '24.0-28.0' };
         return { label: '肥胖 🍕', color: '#e74c3c', range: '≥ 28.0' };
     };
@@ -266,15 +266,15 @@ const Dashboard = () => {
                     background: isDark
                         ? 'linear-gradient(135deg, #3a2828 0%, #2d2d2d 50%, #2d2d2d 100%)'
                         : 'linear-gradient(135deg, #FFE5E5 0%, #FFF5F5 50%, #FFFFFF 100%)',
-                    padding: '24px'
+                    padding: '20px 16px'
                 }}>
-                    <div style={{ fontSize: '0.9rem', color: '#888', marginBottom: '4px' }}>我</div>
+                    <div style={{ fontSize: '0.9rem', color: '#888', marginBottom: '2px' }}>我</div>
                     <div style={{ fontSize: '2.5rem', fontWeight: '700', color: 'var(--color-primary)', marginBottom: '4px', whiteSpace: 'nowrap' }}>
                         {latestWeight ? latestWeight.weight : '--'} <span style={{ fontSize: '1.2rem' }}>kg</span>
                     </div>
                     {latestWeight && <BMIIndicator bmi={latestWeight.bmi} />}
                     {userProfile?.targetWeight && latestWeight && (
-                        <ProgressCircle current={latestWeight.weight} target={userProfile.targetWeight} initial={initialWeight} label="我的目标" color="var(--color-primary)" />
+                        <ProgressCircle current={latestWeight.weight} target={userProfile.targetWeight} initial={initialWeight} label="目标" color="var(--color-primary)" />
                     )}
                 </Card>
 
@@ -284,15 +284,15 @@ const Dashboard = () => {
                         background: isDark
                             ? 'linear-gradient(135deg, #1f3a3a 0%, #2d2d2d 50%, #2d2d2d 100%)'
                             : 'linear-gradient(135deg, #D4F1F4 0%, #E8F8F5 50%, #FFFFFF 100%)',
-                        padding: '24px'
+                        padding: '20px 16px'
                     }}>
-                        <div style={{ fontSize: '0.9rem', color: '#888', marginBottom: '4px' }}>{partnerProfile.displayName}</div>
+                        <div style={{ fontSize: '0.9rem', color: '#888', marginBottom: '2px' }}>{partnerProfile.displayName}</div>
                         <div style={{ fontSize: '2.5rem', fontWeight: '700', color: 'var(--color-secondary)', marginBottom: '4px', whiteSpace: 'nowrap' }}>
                             {partnerLatest ? partnerLatest.weight : '--'} <span style={{ fontSize: '1.2rem' }}>kg</span>
                         </div>
                         {partnerLatest && <BMIIndicator bmi={partnerLatest.bmi} />}
                         {partnerProfile.targetWeight && partnerLatest && (
-                            <ProgressCircle current={partnerLatest.weight} target={partnerProfile.targetWeight} initial={partnerInitial} label="Ta 的目标" color="var(--color-secondary)" />
+                            <ProgressCircle current={partnerLatest.weight} target={partnerProfile.targetWeight} initial={partnerInitial} label="目标" color="var(--color-secondary)" />
                         )}
                     </Card>
                 )}
