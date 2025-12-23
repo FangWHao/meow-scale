@@ -105,7 +105,7 @@ const WeightHistory = () => {
                             return (
                                 <tr key={date} style={{ borderBottom: '1px solid #F5F5F5' }}>
                                     <td style={{ padding: '12px 8px', color: isDark ? '#e0e0e0' : '#333', fontWeight: '500' }}>
-                                        {format(new Date(date), 'MM月dd日')}
+                                        {format(new Date(date), 'MM.dd')}
                                     </td>
                                     <td style={{ padding: '12px 8px', textAlign: 'center' }}>
                                         {userRecord ? (
