@@ -79,13 +79,13 @@ const WeightHistory = () => {
                         <tr style={{ borderBottom: '2px solid #EEE' }}>
                             <th style={{ padding: '12px 8px', textAlign: 'left', color: '#666', fontWeight: '600' }}>日期</th>
                             <th style={{ padding: '12px 8px', textAlign: 'center', color: 'var(--color-primary)', fontWeight: '600' }}>
-                                {userProfile?.displayName || '我'}
+                                我
                             </th>
                             <th style={{ padding: '12px 8px', textAlign: 'center', color: '#999', fontWeight: '500' }}>趋势</th>
                             {partnerProfile && (
                                 <>
                                     <th style={{ padding: '12px 8px', textAlign: 'center', color: 'var(--color-secondary)', fontWeight: '600' }}>
-                                        {partnerProfile.displayName}
+                                        Ta
                                     </th>
                                     <th style={{ padding: '12px 8px', textAlign: 'center', color: '#999', fontWeight: '500' }}>趋势</th>
                                 </>
