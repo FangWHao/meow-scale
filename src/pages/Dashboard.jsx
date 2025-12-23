@@ -224,7 +224,7 @@ const Dashboard = () => {
             <div style={{ display: 'grid', gridTemplateColumns: partnerProfile ? '1fr 1fr' : '1fr', gap: '16px', marginBottom: '20px' }}>
                 <Card className="flex-center" style={{ flexDirection: 'column', background: 'linear-gradient(135deg, #FFF0F5 0%, #FFFFFF 100%)', padding: '24px' }}>
                     <div style={{ fontSize: '0.9rem', color: '#888', marginBottom: '4px' }}>我</div>
-                    <div style={{ fontSize: '2.5rem', fontWeight: '700', color: 'var(--color-primary)', marginBottom: '4px' }}>
+                    <div style={{ fontSize: '2.5rem', fontWeight: '700', color: 'var(--color-primary)', marginBottom: '4px', whiteSpace: 'nowrap' }}>
                         {latestWeight ? latestWeight.weight : '--'} <span style={{ fontSize: '1.2rem' }}>kg</span>
                     </div>
                     {latestWeight && <BMIIndicator bmi={latestWeight.bmi} />}
@@ -236,7 +236,7 @@ const Dashboard = () => {
                 {partnerProfile && (
                     <Card className="flex-center" style={{ flexDirection: 'column', background: 'linear-gradient(135deg, #E0F7FA 0%, #FFFFFF 100%)', padding: '24px' }}>
                         <div style={{ fontSize: '0.9rem', color: '#888', marginBottom: '4px' }}>{partnerProfile.displayName}</div>
-                        <div style={{ fontSize: '2.5rem', fontWeight: '700', color: 'var(--color-secondary)', marginBottom: '4px' }}>
+                        <div style={{ fontSize: '2.5rem', fontWeight: '700', color: 'var(--color-secondary)', marginBottom: '4px', whiteSpace: 'nowrap' }}>
                             {partnerLatest ? partnerLatest.weight : '--'} <span style={{ fontSize: '1.2rem' }}>kg</span>
                         </div>
                         {partnerLatest && <BMIIndicator bmi={partnerLatest.bmi} />}
