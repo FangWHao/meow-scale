@@ -8,7 +8,7 @@ import { Settings as SettingsIcon, Save, ArrowLeft, Heart, Link as LinkIcon, Unl
 import { useNavigate } from 'react-router-dom';
 
 const Settings = () => {
-    const { currentUser } = useAuth();
+    const { currentUser, logout } = useAuth();
     const navigate = useNavigate();
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
@@ -287,6 +287,34 @@ const Settings = () => {
                             {error}
                         </div>
                     )}
+                </Card>
+            </section>
+
+            <section style={{ marginTop: '30px' }}>
+                <Card style={{ border: '2px solid #fee', background: '#fff5f5' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                        <div>
+                            <div style={{ fontWeight: '600', color: '#e74c3c' }}>退出登录</div>
+                            <div style={{ fontSize: '0.8rem', color: '#888', marginTop: '4px' }}>
+                                退出后需要重新登录才能访问
+                            </div>
+                        </div>
+                        <Button
+                            onClick={async () => {
+                                if (window.confirm('确定要退出登录吗？')) {
+                                    await logout();
+                                    navigate('/login');
+                                }
+                            }}
+                            style={{
+                                background: '#e74c3c',
+                                color: 'white',
+                                width: '100%'
+                            }}
+                        >
+                            退出登录
+                        </Button>
+                    </div>
                 </Card>
             </section>
         </div>
