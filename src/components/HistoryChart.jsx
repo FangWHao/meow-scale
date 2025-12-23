@@ -142,8 +142,8 @@ const HistoryChart = ({ userData = [], partnerData = [], title, onViewDetails })
             filteredPartnerData.length > 0 && {
                 label: view === 'weight' ? '伴侣体重' : '伴侣 BMI',
                 data: getDataForDates(filteredPartnerData, view),
-                borderColor: '#B2CEFE',
-                backgroundColor: 'rgba(178, 206, 254, 0.2)',
+                borderColor: '#5FD4A8',
+                backgroundColor: 'rgba(95, 212, 168, 0.2)',
                 tension: 0.4,
                 spanGaps: true,
                 pointStyle: getAssignedIcons(filteredPartnerData, view, blueIcons, partnerIconIndices),
